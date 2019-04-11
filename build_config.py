@@ -49,7 +49,7 @@ SERVICES =  {"./vendor/serviceAccess" :
               "Port": 2323,
               "Version": "1.00",
               "IsHttpInterface" : False,
-              "IsAutoload" : False 
+              "IsAutoload" : True 
             },
 
 

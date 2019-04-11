@@ -17,7 +17,7 @@ def UpdateService(path_service):
     os.chdir(path_service)
 
     #Обновление
-    if os.system("git pull") != 0:
+    if os.system("git pull origin master") != 0:
         print("Не удалось обновить сервис {0}!".format(path_service))
         return
 
