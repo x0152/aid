@@ -1,0 +1,24 @@
+[submodule "vendor/serviceReceptionFiles"]
+	path = vendor/serviceReceptionFiles
+	url = https://github.com/ssx0152/serviceReceptionFiles
+[submodule "vendor/servicePythonScripts"]
+	path = vendor/servicePythonScripts
+	url = https://github.com/ssx0152/servicePythonScripts
+[submodule "vendor/serviceManagerLogs"]
+	path = vendor/serviceManagerLogs
+	url = https://github.com/ssx0152/serviceManagerLogs
+[submodule "vendor/serviceNotification"]
+	path = vendor/serviceNotification
+	url = https://github.com/ssx0152/serviceNotification
+[submodule "vendor/serviceNetcat"]
+	path = vendor/serviceNetcat
+	url = https://github.com/ssx0152/serviceNetcat
+[submodule "vendor/serviceDeliveryFiles"]
+	path = vendor/serviceDeliveryFiles
+	url = https://github.com/ssx0152/serviceDeliveryFiles
+[submodule "vendor/serviceControl"]
+	path = vendor/serviceControl
+	url = https://github.com/ssx0152/serviceControl
+[submodule "vendor/serviceAccess"]
+	path = vendor/serviceAccess
+	url = https://github.com/ssx0152/serviceAccess

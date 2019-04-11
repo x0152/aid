@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+import os
+from build_config import *
+from shutil import copyfile
+
+path_build = ""
+path_start = os.getcwd()
+
+def makeConfig(params, path_config, path_service):
+    path_readme = path_service + "/" + "README.md"
+
+    #Чтение README файла
+    if os.path.isfile(path_readme):
+        f = open(path_readme, "r")
+        if f.mode == 'r':
+           contents = f.read()
+           params["Description"] = str(contents)
+
+    #Создание конфиг файла
+    with open(path_config, "w") as outfile:
+        json.dump(params, outfile) 
+
+#Если не задан аргумент, путь сборки по умолчанию ./build/
+if len(sys.argv) < 2 or sys.argv[1] == "":
+    path_build = path_start + "/build"
+else:
+    path_build = sys.argv[1] 
+
+#Если папка сборки не существует, то создаем ее
+if os.path.isdir(path_build) == False:
+    os.mkdir(path_build)
+
+#Проверка существавание MAIN_SERVICE(Control service
+if os.path.isdir(MAIN_SERIVCE) == False:
+    print("Не найден " + MAIN_SERIVCE)
+    exit(-1)
+
+
+#Перемещаемся в папку с control service 
+os.chdir(MAIN_SERIVCE)
+print("< -- Компиляция serviceControl -- >")
+
+#Комплириуем его в указанную директорию
+if os.system("python3 " + "install " + path_build) != 0:
+    print("Компиляция прервана!")
+    exit(-1)
+
+#Если папка services не создана, то создаем ее (в нее будут компилироваться все остальные сервисы)
+if os.path.isdir(path_build + "/services") == False:
+    os.mkdir(path_build + "/services")
+
+#Пермещаямся в начальную директорию
+os.chdir(path_start)
+
+#Счетчик успешно скомпилированных сервисов (service control -> 1)
+succecfull = 1
+#Буфер сервисов с ошибками при компиляции ошибок
+wrong_services = ""
+
+#Компиляция сервисов
+for path_service, params_service in SERVICES.items():
+
+    #Пермещаямся в начальную директорию
+    os.chdir(path_start)
+
+    #Проверяем существование исходников
+    if os.path.isdir(path_service) == False:
+        wrong_services += ", " +  path_service
+        print("Не найден " + path_service)
+        continue
+
+    #Создаем директорию компиляции
+    path_build_service = path_build + "/services/" + params_service["Name"]
+    if os.path.isdir(path_build_service) == False:
+        os.mkdir(path_build_service)
+
+    #Создаем конфиг файл
+    makeConfig(params_service, path_build_service + "/" + "control.conf", path_service)
+
+    #Переходим в директорию с исходниками
+    os.chdir(path_service)
+
+    #Комплириуем сервис в указанную директорию
+    print("")
+    print("< -- Компиляция " + params_service["Name"] +  " -- >")
+    if os.system("python3 " + "install " + path_build_service) != 0:
+        wrong_services += ", " +  path_service
+        print("Компиляция прервана!")
+        continue
+
+    #print("< -- Компиляция " + params_service["Name"] + " завершена -- >")
+    succecfull += 1
+
+print("Успешно завершено: {0}, Ошибки: {1}".format(succecfull, len(SERVICES) - succecfull + 1))
+
+if len(wrong_services) != 0:
+    print("Не удалось скомпилировать: {0}.".format(wrong_services))
