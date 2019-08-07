@@ -1,4 +1,5 @@
 # aid
+Система удаленного управления сервером.
 <ui>
 <li><a href="https://github.com/ssx0152/serviceControl">Control</a></li>
 <li><a href="https://github.com/ssx0152/serviceAccess">Access</a></li>
